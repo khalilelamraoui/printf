@@ -1,6 +1,6 @@
 # printf
 <hr>
-<h2> function that produces output according to a format.</h2>h2>
+<h2> function that produces output according to a format. </h2>
 <ul>
   <li>
     Prototype: <code>int _printf(const char *format, ...);</code>
