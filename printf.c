@@ -8,10 +8,10 @@
  */
 int _printf(const char *format, ...)
 {
-        int char_count = 0, count, c, len, num, j;
+        int char_count = 0, count, c, len, num, j, i;
         unsigned int uns_num;
 	void *ptr;
-        char buffer[1024], binary[33];
+        char buffer[1024], binary[33], *str2;
         const char *str;
         va_list args;
 
@@ -97,6 +97,23 @@ int _printf(const char *format, ...)
 				write(1, buffer, count);
 				char_count += count;
 			}
+			else if (*format == 'r')
+                        {
+                                str = va_arg(args, const char *);
+                                len = 0;
+				str2 = (char *)malloc((len + 1) * sizeof(char));
+                                while (str[len] != '\0')
+                                        len++;
+				if (str2)
+				{
+					for(j = len - 1, i = 0; j >= 0; j--, i++)
+						str2[i] = str[j];
+					str2[len] = '\0';
+                                	write(1, str2, len);
+                                	char_count += len;
+					free(str2);
+				}
+                        }
 		}
                 format++;
         }

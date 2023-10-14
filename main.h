@@ -4,6 +4,7 @@
 #include<stdarg.h>
 #include<unistd.h>
 #include<stdio.h>
+#include<stdlib.h>
 
 /**
  * struct format_specifiers - Struct for format specifiers
