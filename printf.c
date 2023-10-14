@@ -9,7 +9,7 @@
 int _printf(const char *format, ...)
 {
 	int char_count = 0, c, len, num, count;
-	char buffer[12];
+	char buffer[4096];
 	const char *str;
 	va_list args;
 
