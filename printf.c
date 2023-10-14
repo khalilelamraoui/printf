@@ -10,7 +10,7 @@ int _printf(const char *format, ...)
 {
 	int char_count = 0, count, c, len, num, j;
 	unsigned int uns_num;
-	char buffer[12], binary[33];
+	char buffer[1024], binary[33];
 	const char *str;
 	va_list args;
 
