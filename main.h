@@ -3,6 +3,7 @@
 
 #include<stdarg.h>
 #include<unistd.h>
+#include<stdio.h>
 
 /**
  * struct format_specifiers - Struct for format specifiers
