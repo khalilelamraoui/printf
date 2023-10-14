@@ -11,8 +11,8 @@ int _printf(const char *format, ...)
         int char_count = 0, count, c, len, num, j, i;
         unsigned int uns_num;
 	void *ptr;
-        char buffer[1024], binary[33], *str2;
-        const char *str;
+        char buffer[1024], binary[33], *str2, c_rot, *rot13;
+        const char *str, *str_Rot;
         va_list args;
 
         va_start(args, format);
@@ -114,6 +114,31 @@ int _printf(const char *format, ...)
 					free(str2);
 				}
                         }
+			else if (format[i] == 'R')
+			{
+				str_Rot = va_arg(args, const char *);
+				len = 0;
+				while (str_Rot[len] != '\0')
+					len++;
+				rot13 = (char *)malloc((len + 1) * sizeof(char));
+				if (rot13) {
+					for (j = 0; j < len; j++) {
+						c_rot = str[j];
+						if ((c_rot >= 'a' && c_rot <= 'm')
+						|| (c_rot >= 'A' && c_rot <= 'M'))
+							rot13[j] = c_rot + 13;
+						else if ((c_rot >= 'n' && c_rot <= 'z')
+						|| (c_rot >= 'N' && c_rot <= 'Z'))
+							rot13[j] = c_rot - 13;
+						else
+							rot13[j] = c_rot;
+					}
+					rot13[len] = '\0';
+					write(1, rot13, len);
+					char_count += len;
+					free(rot13);
+				}
+			}
 		}
                 format++;
         }
