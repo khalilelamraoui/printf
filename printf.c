@@ -9,6 +9,7 @@
 int _printf(const char *format, ...)
 {
         int char_count = 0, count, c, len, num, j;
+	int plus_flag = 0, space_flag = 0, hash_flag = 0;
         unsigned int uns_num;
 	void *ptr;
         char buffer[1024], binary[33];
@@ -31,6 +32,16 @@ int _printf(const char *format, ...)
                 else
                 {
                         format++;
+			while (*format == '+' || *format == ' ' || *format == '#')
+			{
+				if (*format == '+')
+					plus_flag = 1;
+				else if (*format == ' ')
+					space_flag = 1;
+				else if (*format == '#')
+					hash_flag = 1;
+				format++;
+			}
                         if (*format == 'c')
                         {
                                 c = va_arg(args, int);
@@ -54,7 +65,8 @@ int _printf(const char *format, ...)
                         else if (*format == 'd' || *format == 'i')
                         {
                                 num = va_arg(args, int);
-                                count = snprintf(buffer, sizeof(buffer), "%d", num);
+                                count = snprintf(buffer, sizeof(buffer),
+					"%s%s%d", plus_flag ? "+" : "", space_flag ? " " : "", num);
                                 write(1, buffer, count);
                                 char_count += count;
                         }
@@ -72,6 +84,8 @@ int _printf(const char *format, ...)
 			else if (*format == 'p')
 			{
 				ptr = va_arg(args, void *);
+				if (hash_flag)
+					write(1, "0x", 2);
 				count = snprintf(buffer, sizeof(buffer), "%p", ptr);
 				write(1, buffer, count);
 				char_count += count;
