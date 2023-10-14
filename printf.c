@@ -28,7 +28,7 @@ int _printf(const char *format, ...)
 			if (*format == 'c')
 			{
 				c = va_arg(args, int);
-				write(1, &c, 1);
+				write(1, &c, sizeof(int));
 				char_count++;
 			}
 			else if (*format == 's')
