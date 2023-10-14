@@ -1,5 +1,4 @@
-#include <stdarg.h>
-#include <unistd.h>
+#include"main.h"
 /**
  * _printf - Print formatted output to stdout
  * @format: The format string
