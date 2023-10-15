@@ -10,9 +10,10 @@ int _printf(const char *format, ...)
 {
         int char_count = 0, count, c, len, num, leading_zero, bit, j, ascii_code, i;
         unsigned int uns_num;
+	int plus_flag = 0, space_flag = 0, hash_flag = 0;
 	void *ptr;
         char buffer[1024], c_rot, *rot13, hex[3], *str2;
-        const char *str, *str_Rot, *format_str;
+        const char *str, *str_Rot;
         va_list args;
 
         va_start(args, format);
@@ -31,6 +32,16 @@ int _printf(const char *format, ...)
                 else
                 {
                         format++;
+			while (*format == '+' || *format == ' ' || *format == '#')
+			{
+				if (*format == '+')
+					plus_flag = 1;
+				else if (*format == ' ')
+					space_flag = 1;
+				else if (*format == '#')
+					hash_flag = 1;
+				format++;
+			}
                         if (*format == 'c')
                         {
                                 c = va_arg(args, int);
@@ -54,9 +65,9 @@ int _printf(const char *format, ...)
                         else if (*format == 'd' || *format == 'i')
                         {
                                 num = va_arg(args, int);
-				format_str = (*format == '0') ? "%0d" : "%d";
-                                count = snprintf(buffer, sizeof(buffer), format_str, num);
-                                write(1, buffer, count);
+                                count = snprintf(buffer, sizeof(buffer),
+					"%s%s%d", plus_flag ? "+" : "", space_flag ? " " : "", num);
+				write(1, buffer, count);
                                 char_count += count;
 			}
 			else if (*format == 'b') {
@@ -82,6 +93,8 @@ int _printf(const char *format, ...)
 			else if (*format == 'p')
 			{
 				ptr = va_arg(args, void *);
+				if (hash_flag)
+					write(1, "0x", 2);
 				count = snprintf(buffer, sizeof(buffer), "%p", ptr);
 				write(1, buffer, count);
 				char_count += count;
