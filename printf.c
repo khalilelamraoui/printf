@@ -8,11 +8,11 @@
  */
 int _printf(const char *format, ...)
 {
-        int char_count = 0, count, c, len, num, leading_zero, bit, j, i, ascii_code;
+        int char_count = 0, count, c, len, num, leading_zero, bit, j, ascii_code;
         unsigned int uns_num;
 	void *ptr;
-        char buffer[1024], *str2, c_rot, *rot13, hex[3];
-        const char *str, *str_Rot, *format_str;
+        char buffer[1024], c_rot, *rot13, hex[3];
+        const char *str, *str_Rot, *format_str, *literal = "%r";
         va_list args;
 
         va_start(args, format);
@@ -131,22 +131,11 @@ int _printf(const char *format, ...)
 			}
 			else if (*format == 'r')
                         {
-                                str = va_arg(args, const char *);
-                                len = 0;
-				str2 = (char *)malloc((len + 1) * sizeof(char));
-                                while (str[len] != '\0')
-                                        len++;
-				if (str2)
-				{
-					for(j = len - 1, i = 0; j >= 0; j--, i++)
-						str2[i] = str[j];
-					str2[len] = '\0';
-                                	write(1, str2, len);
-                                	char_count += len;
-					free(str2);
-				}
+				len = 2;
+				write(1, literal, len);
+				char_count += len;
                         }
-			else if (format[i] == 'R')
+			else if (*format == 'R')
 			{
 				str_Rot = va_arg(args, const char *);
 				len = 0;
