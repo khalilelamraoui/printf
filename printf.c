@@ -12,7 +12,7 @@ int _printf(const char *format, ...)
         unsigned int uns_num;
 	void *ptr;
         char buffer[1024], binary[33], *str2, c_rot, *rot13;
-        const char *str, *str_Rot;
+        const char *str, *str_Rot, *format_str;
         va_list args;
 
         va_start(args, format);
@@ -54,7 +54,8 @@ int _printf(const char *format, ...)
                         else if (*format == 'd' || *format == 'i')
                         {
                                 num = va_arg(args, int);
-                                count = snprintf(buffer, sizeof(buffer), "%d", num);
+				format_str = (*format == '0') ? "%0d" : "%d";
+                                count = snprintf(buffer, sizeof(buffer), format_str, num);
                                 write(1, buffer, count);
                                 char_count += count;
                         }
