@@ -8,10 +8,10 @@
  */
 int _printf(const char *format, ...)
 {
-        int char_count = 0, count, c, len, num, j, i, ascii_code;
+        int char_count = 0, count, c, len, num, leading_zero, bit, j, i, ascii_code;
         unsigned int uns_num;
 	void *ptr;
-        char buffer[1024], binary[33], *str2, c_rot, *rot13, hex[3];
+        char buffer[1024], *str2, c_rot, *rot13, hex[3];
         const char *str, *str_Rot, *format_str;
         va_list args;
 
@@ -58,17 +58,26 @@ int _printf(const char *format, ...)
                                 count = snprintf(buffer, sizeof(buffer), format_str, num);
                                 write(1, buffer, count);
                                 char_count += count;
-                        }
-                        else if (*format == 'b') {
+			}
+			else if (*format == 'b') {
                                 uns_num = va_arg(args, unsigned int);
-                                for (j = 31; j >= 0; j--)
-                                        binary[31 - j] = ((uns_num >> j) & 1) ? '1' : '0';
-                                binary[32] = '\0';
-                                for (j = 0; binary[j] != '\0'; j++)
-                                {
-                                        write(1, &binary[j], 1);
-                                        char_count++;
-                                }
+                                leading_zero = 1;
+				for (j = 31; j >= 0; j--)
+				{
+					bit = ((uns_num >> j) & 1);
+					if (bit == 1)
+						leading_zero = 0;
+					if (leading_zero == 0)
+					{
+						write(1, (bit == 1) ? "1" : "0", 1);
+						char_count++;
+					}
+				}
+				if (char_count == 0)
+				{
+					write(1, "0", 1);
+					char_count = 1;
+				}
                         }
 			else if (*format == 'p')
 			{
