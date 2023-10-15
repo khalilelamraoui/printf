@@ -8,10 +8,10 @@
  */
 int _printf(const char *format, ...)
 {
-        int char_count = 0, count, c, len, num, j, i;
+        int char_count = 0, count, c, len, num, j, i, ascii_code;
         unsigned int uns_num;
 	void *ptr;
-        char buffer[1024], binary[33], *str2, c_rot, *rot13;
+        char buffer[1024], binary[33], *str2, c_rot, *rot13, hex[3];
         const char *str, *str_Rot, *format_str;
         va_list args;
 
@@ -97,6 +97,28 @@ int _printf(const char *format, ...)
 				count = snprintf(buffer, sizeof(buffer), (*format == 'x') ? "%x" : "%X", num);
 				write(1, buffer, count);
 				char_count += count;
+			}
+			else if (*format == 'S')
+			{
+				str = va_arg(args, const char *);
+				while (*str)
+				{
+					if (*str >= 32 && *str < 127)
+					{
+						write(1, str, 1);
+						char_count++;
+					}
+					else
+					{
+						write(1, "\\x", 2);
+						char_count += 2;
+						ascii_code = *str;
+						snprintf(hex, sizeof(hex), "%02X", ascii_code);
+						write(1, hex, 2);
+						char_count += 2;
+					}
+					str++;
+				}
 			}
 			else if (*format == 'r')
                         {
